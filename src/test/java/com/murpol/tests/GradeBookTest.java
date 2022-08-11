@@ -2,18 +2,20 @@ package com.murpol.tests;
 
 import com.murpol.classes.GradeBook;
 import com.murpol.classes.Subject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GradeBookTest {
+class GradeBookTest {
 
+    GradeBook gradeBook = new GradeBook();
 
 
     @Test
     void addingSubjectToGradeBook() {
         String name = "Polski";
-        var gradeBook = new GradeBook();
+
         var subject = new Subject(name);
 
         gradeBook.addSubject(name, subject);
@@ -26,7 +28,6 @@ public class GradeBookTest {
     void addingGradeToSubject() {
         int grade = 3;
         String name = "Polski";
-        var gradeBook = new GradeBook();
         var subject = new Subject(name);
 
         gradeBook.addSubject(name, subject);
@@ -42,7 +43,6 @@ public class GradeBookTest {
         String name2 = "Angielski";
         String name3 = "Matematyka";
 
-        var gradeBook = new GradeBook();
         var subject1 = new Subject(name1);
         var subject2 = new Subject(name2);
         var subject3 = new Subject(name3);
@@ -63,5 +63,19 @@ public class GradeBookTest {
         double average = gradeBook.calculateAverageForAllSubjects();
 
         assertThat(average).isEqualTo(2.83);
+    }
+
+    @Test
+    void addingSubjectsWithTheSameName(){
+        String name1 = "Polski";
+        String name2 = "Polski";
+
+        var subject1 = new Subject(name1);
+        var subject2 = new Subject(name2);
+
+        gradeBook.addSubject(name1, subject1);
+        gradeBook.addSubject(name2, subject2);
+
+        assertThat(gradeBook.getSubjects().values()).doesNotContain(subject2);
     }
 }

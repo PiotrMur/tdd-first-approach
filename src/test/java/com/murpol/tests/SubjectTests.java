@@ -8,14 +8,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class SubjectTests {
+class SubjectTests {
 
+    String name = "Polski";
+    Subject subject = new Subject(name);
 
     @Test
     void addingGradeToSubject() {
-        //given
-        String name = "Polski";
-        var subject = new Subject(name);
+
         //when
         subject.addGrade(4);
 
@@ -25,8 +25,6 @@ public class SubjectTests {
 
     @Test
     void gettingAllGrades() {
-        String name = "Polski";
-        var subject = new Subject(name);
         subject.addGrade(4);
         subject.addGrade(5);
 
@@ -37,7 +35,6 @@ public class SubjectTests {
 
     @Test
     void calculatingSubjectsGradesAverage() {
-        var subject = new Subject("Polski");
         subject.addGrade(4);
         subject.addGrade(2);
 

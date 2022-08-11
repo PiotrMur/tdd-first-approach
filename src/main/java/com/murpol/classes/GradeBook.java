@@ -12,11 +12,20 @@ public class GradeBook {
     }
 
     public void addSubject(String name, Subject subject) {
-        getSubjects().put(name, subject);
+        if (!(getSubjects().containsKey(name))) {
+            getSubjects().put(name, subject);
+        } else {
+            throw new IllegalArgumentException("An element with the key: '" + name + "' is already in the grade book");
+        }
+
     }
 
     public void addGradeToSubject(String name, int grade) {
-        getSubjects().get(name).addGrade(grade);
+        if (getSubjects().get(name) != null) {
+            getSubjects().get(name).addGrade(grade);
+        } else {
+            throw new NullPointerException("There is no such subject in the grade book");
+        }
     }
 
     public double calculateAverageForAllSubjects() {
@@ -30,6 +39,9 @@ public class GradeBook {
             }
             denominator += subject.getGrades().size();
         }
-        return Math.round(sum/denominator*100.0)/100.0;
+        if(denominator<=0){
+            throw new ArithmeticException("Denominator must hold a positive value");
+        }
+        return Math.round(sum / denominator * 100.0) / 100.0;
     }
 }
