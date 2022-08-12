@@ -2,10 +2,14 @@ package com.murpol.tests;
 
 import com.murpol.classes.GradeBook;
 import com.murpol.classes.Subject;
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assert;
+import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GradeBookTest {
 
@@ -65,17 +69,18 @@ class GradeBookTest {
         assertThat(average).isEqualTo(2.83);
     }
 
+
     @Test
-    void addingSubjectsWithTheSameName(){
+    void preventingAddingAlreadyExisitngElement(){
         String name1 = "Polski";
         String name2 = "Polski";
 
         var subject1 = new Subject(name1);
         var subject2 = new Subject(name2);
 
-        gradeBook.addSubject(name1, subject1);
-        gradeBook.addSubject(name2, subject2);
+        gradeBook.addSubject("Polski", subject1);
+        gradeBook.addSubject("Polski", subject2);
 
-        assertThat(gradeBook.getSubjects().values()).doesNotContain(subject2);
+        assertThat(gradeBook.getSubjects()).containsExactly(MapEntry.entry("Polski", subject1));
     }
 }

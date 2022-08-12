@@ -1,7 +1,10 @@
 package com.murpol.classes;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.math.RoundingMode.HALF_UP;
 
 public class GradeBook {
 
@@ -11,21 +14,15 @@ public class GradeBook {
         return subjects;
     }
 
-    public void addSubject(String name, Subject subject) {
-        if (!(getSubjects().containsKey(name))) {
-            getSubjects().put(name, subject);
-        } else {
-            throw new IllegalArgumentException("An element with the key: '" + name + "' is already in the grade book");
-        }
-
+    public void addSubject(String subjectName, Subject subject) {
+        subjects.putIfAbsent(subjectName, subject);
     }
 
-    public void addGradeToSubject(String name, int grade) {
-        if (getSubjects().get(name) != null) {
-            getSubjects().get(name).addGrade(grade);
-        } else {
-            throw new NullPointerException("There is no such subject in the grade book");
+    public void addGradeToSubject(String subjectName, int grade) {
+        if (subjects.get(subjectName) == null) {
+            throw new SubjectDoesntExistException(subjectName);
         }
+        subjects.get(subjectName).addGrade(grade);
     }
 
     public double calculateAverageForAllSubjects() {
@@ -39,9 +36,15 @@ public class GradeBook {
             }
             denominator += subject.getGrades().size();
         }
-        if(denominator<=0){
+        if (denominator <= 0) {
             throw new ArithmeticException("Denominator must hold a positive value");
         }
-        return Math.round(sum / denominator * 100.0) / 100.0;
+        return BigDecimal.valueOf(sum / denominator ).setScale(2, HALF_UP).doubleValue();
+    }
+
+    private static class SubjectDoesntExistException extends RuntimeException {
+        public SubjectDoesntExistException(String subjectName) {
+            super("There is no such subject [" + subjectName + "] in the grade book");
+        }
     }
 }

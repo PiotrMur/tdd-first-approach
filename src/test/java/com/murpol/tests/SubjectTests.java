@@ -42,4 +42,6 @@ class SubjectTests {
 
         assertThat(average).isEqualTo(3);
     }
+
+
 }

@@ -1,8 +1,11 @@
 package com.murpol.classes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static java.math.RoundingMode.HALF_UP;
 
 public class Subject {
 
@@ -13,29 +16,31 @@ public class Subject {
         this.name = name;
     }
 
-    public void addGrade(int grade) {
-        if (grade >= 1 && grade <= 5) {
-            grades.add(grade);
-        } else {
-            throw new IllegalArgumentException("Grades must belong to the range '1-5'");
-        }
+    public String getName() {
+        return name;
     }
 
     public List<Integer> getGrades() {
         return grades;
     }
 
-    public String getName() {
-        return name;
+    public void addGrade(int grade) {
+        if (!(grade >= 1 && grade <= 5)) {
+            throw new IllegalArgumentException("Grades must belong to the range '1-5'");
+        }
+        grades.add(grade);
     }
 
-
     public double calculateSubjectAverage() {
-        int sum = 0;
-        for (int grade : getGrades()) {
+        if (grades.isEmpty()){
+            return 0d;
+        }
+
+        double sum = 0;
+        for (int grade : grades) {
             sum += grade;
         }
-        return (double) sum / grades.size();
+        return BigDecimal.valueOf(sum / grades.size()).setScale(2, HALF_UP).doubleValue();
     }
 
     @Override
@@ -49,5 +54,10 @@ public class Subject {
     @Override
     public int hashCode() {
         return Objects.hash(name, grades);
+    }
+
+    @Override
+    public String toString() {
+        return name + " = " + getGrades();
     }
 }
